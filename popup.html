@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{width:420px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#1f2937;background:#fff}
+    .header{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;padding:14px 20px}
+    .header h1{font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
+    .header p{font-size:11px;opacity:0.85;margin-top:3px}
+    .tabs{display:flex;border-bottom:1px solid #e5e7eb}
+    .tab{flex:1;padding:8px;text-align:center;font-size:12px;font-weight:600;color:#6b7280;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s}
+    .tab.active{color:#7c3aed;border-bottom-color:#7c3aed}
+    .tab:hover{color:#4b5563}
+    .tab-badge{font-size:10px;background:#e5e7eb;color:#6b7280;padding:0 5px;border-radius:8px;margin-left:4px}
+    .tab.active .tab-badge{background:#f3e8ff;color:#7c3aed}
+    .panel{display:none;padding:12px 20px}
+    .panel.active{display:block}
+
+    .section-title{font-size:10px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin:8px 0 6px}
+    .dl-list{max-height:240px;overflow-y:auto}
+    .dl-item{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f9fafb;font-size:11px}
+    .dl-item:last-child{border-bottom:none}
+    .dl-date{flex-shrink:0;text-align:center;width:32px}
+    .dl-date .month{font-size:8px;color:#6b7280;font-weight:600;text-transform:uppercase}
+    .dl-date .day{font-size:15px;font-weight:700;color:#1f2937;line-height:1.1}
+    .dl-info{flex:1;min-width:0}
+    .dl-name{font-size:11px;font-weight:600;color:#1f2937;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dl-meta{font-size:9px;color:#9ca3af;margin-top:1px}
+    .dl-status{flex-shrink:0;font-size:9px;font-weight:600;padding:2px 5px;border-radius:6px}
+    .overdue{background:#fef2f2;color:#dc2626}.urgent{background:#fffbeb;color:#d97706}.normal{background:#eff6ff;color:#2563eb}.later{background:#f3f4f6;color:#6b7280}
+    .done-status{background:#ecfdf5;color:#059669}
+    .empty{text-align:center;padding:14px;color:#b0b0b0;font-size:11px}
+    .src{font-size:8px;padding:0 3px;border-radius:2px;font-weight:600;margin-left:2px;color:#fff}
+    .src-autolab{background:#7c3aed}.src-ispace{background:#059669}
+
+    .url-list{max-height:150px;overflow-y:auto;margin-bottom:6px}
+    .url-item{display:flex;align-items:center;gap:5px;padding:5px 0;border-bottom:1px solid #f9fafb;font-size:10px}
+    .url-item:last-child{border-bottom:none}
+    .url-text{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#4b5563;font-family:monospace;font-size:10px}
+    .url-course{font-size:9px;color:#9ca3af;flex-shrink:0;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .url-badge{font-size:8px;padding:1px 4px;border-radius:3px;font-weight:600;flex-shrink:0}
+    .url-badge-auto{background:#eff6ff;color:#2563eb}
+    .url-badge-manual{background:#f3e8ff;color:#7c3aed}
+    .url-del{background:none;border:none;color:#d1d5db;cursor:pointer;font-size:13px;padding:0 2px;line-height:1}
+    .url-del:hover{color:#dc2626}
+    .add-row{display:flex;gap:5px}
+    .add-row input{flex:1;padding:4px 7px;border:1px solid #d1d5db;border-radius:5px;font-size:10px;outline:none;font-family:monospace}
+    .add-row input:focus{border-color:#7c3aed;box-shadow:0 0 0 2px rgba(124,58,237,0.1)}
+    .btn{padding:4px 10px;border:1px solid #d1d5db;border-radius:5px;background:#fff;font-size:10px;font-weight:500;cursor:pointer;white-space:nowrap}
+    .btn:hover{background:#f9fafb}
+    .btn-primary{background:#7c3aed;border-color:#7c3aed;color:#fff}
+    .btn-primary:hover{background:#6d28d9}
+    .btn-danger{color:#dc2626;border-color:#fca5a5;font-size:10px}
+    .btn-danger:hover{background:#fef2f2}
+    .btn-sm{padding:2px 6px;font-size:9px}
+    .btn-row{display:flex;gap:5px;margin-top:6px}
+    .dl-done-btn{background:none;border:1px solid #d1d5db;border-radius:4px;padding:2px 5px;font-size:9px;cursor:pointer;color:#6b7280;white-space:nowrap}
+    .dl-done-btn:hover{background:#ecfdf5;border-color:#6ee7b7;color:#059669}
+    .dl-undo-btn{background:none;border:1px solid #d1d5db;border-radius:4px;padding:2px 5px;font-size:9px;cursor:pointer;color:#6b7280;white-space:nowrap}
+    .dl-undo-btn:hover{background:#fef2f2;border-color:#fca5a5;color:#dc2626}
+    .done-row{opacity:0.6}
+    .done-row .dl-name{text-decoration:line-through}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Moodle DDL Helper
+    </h1>
+    <p>Autolab DDL → iSpace Timeline</p>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active" data-tab="deadlines">截止日期<span class="tab-badge" id="dl-count">0</span></div>
+    <div class="tab" data-tab="urls">Autolab 配置<span class="tab-badge" id="url-count">0</span></div>
+    <div class="tab" data-tab="done">已完成<span class="tab-badge" id="done-count">0</span></div>
+  </div>
+
+  <div class="panel active" data-panel="deadlines">
+    <div id="dl-list" class="dl-list"><div class="empty">暂无</div></div>
+    <div class="btn-row"><button class="btn btn-danger" id="clearBtn" style="flex:1">清空全部 DDL</button></div>
+  </div>
+
+  <div class="panel" data-panel="urls">
+    <div class="section-title">已配置的 Autolab 地址</div>
+    <div id="url-list" class="url-list"></div>
+    <div class="add-row">
+      <input type="text" id="newUrl" placeholder="http://172.31.12.111/courses/xxx">
+      <button class="btn btn-primary" id="addBtn">添加</button>
+    </div>
+  </div>
+
+  <div class="panel" data-panel="done">
+    <div class="section-title">已完成的作业</div>
+    <div id="done-list" class="dl-list"><div class="empty">暂无</div></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

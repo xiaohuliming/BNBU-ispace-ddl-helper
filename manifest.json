@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "Moodle DDL Helper",
+  "version": "3.0.0",
+  "description": "从 Autolab 抓取截止日期，注入到 iSpace Dashboard Timeline",
+  "permissions": [
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://ispace.uic.edu.cn/*",
+    "http://172.31.12.111/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://ispace.uic.edu.cn/course/view.php*"],
+      "js": ["content-course.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://ispace.uic.edu.cn/my/",
+        "https://ispace.uic.edu.cn/my",
+        "https://ispace.uic.edu.cn/my/?*",
+        "https://ispace.uic.edu.cn/my/index.php*"
+      ],
+      "js": ["content-dashboard.js"],
+      "css": ["styles.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
