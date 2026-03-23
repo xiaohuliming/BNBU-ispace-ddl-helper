@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="dist/icons/icon128.png" width="80" height="80" alt="Moodle DDL Helper">
+<img src="dist/icons/icon128.svg" width="80" height="80" alt="Moodle DDL Helper">
 
 # Moodle DDL Helper
 
