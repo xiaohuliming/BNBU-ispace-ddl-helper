@@ -162,8 +162,8 @@ This Chrome extension automatically fetches deadlines from Autolab and **injects
 1. 下载或 clone 本仓库
 2. Chrome 打开 `chrome://extensions/`
 3. 右上角开启 **开发者模式**
-4. 点击 **加载已解压的扩展程序**
-5. 选择 `dist/` 文件夹
+4. 点击 **加载未打包的扩展程序**
+5. 选择压缩包中解压出的文件夹
 
 ### 使用方法
 
